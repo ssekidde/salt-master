@@ -1,0 +1,23 @@
+
+## <summary>policy for saltmaster</summary>
+
+
+########################################
+## <summary>
+##	Transition to saltmaster.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`saltmaster_domtrans',`
+	gen_require(`
+		type saltmaster_t, saltmaster_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, saltmaster_exec_t, saltmaster_t)
+')
+

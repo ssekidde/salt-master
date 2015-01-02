@@ -1,0 +1,75 @@
+policy_module(saltmaster, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type saltmaster_t;
+type saltmaster_exec_t;
+init_daemon_domain(saltmaster_t, saltmaster_exec_t)
+
+type saltmaster_var_run_t;
+files_pid_file(saltmaster_var_run_t)
+
+permissive saltmaster_t;
+
+########################################
+#
+# saltmaster local policy
+#
+
+allow saltmaster_t self:fifo_file rw_fifo_file_perms;
+allow saltmaster_t self:unix_stream_socket create_stream_socket_perms;
+
+can_exec(saltmaster_t, saltmaster_exec_t)
+allow saltmaster_t self:netlink_route_socket { bind create getattr nlmsg_read };
+allow saltmaster_t self:tcp_socket { connect connected_stream_socket_perms };
+allow saltmaster_t self:udp_socket create_socket_perms;
+
+manage_dirs_pattern(saltmaster_t, saltmaster_var_run_t, saltmaster_var_run_t)
+manage_files_pattern(saltmaster_t, saltmaster_var_run_t, saltmaster_var_run_t)
+manage_sock_files_pattern(saltmaster_t, saltmaster_var_run_t, saltmaster_var_run_t)
+files_pid_filetrans(saltmaster_t, saltmaster_var_run_t, { dir file sock_file })
+
+domain_use_interactive_fds(saltmaster_t)
+prelink_transition_domain_attribute(saltmaster_t)
+auth_var_filetrans_cache(saltmaster_t)
+brctl_exec(saltmaster_t)
+
+application_exec_all(saltmaster_t)
+corecmd_exec_bin(saltmaster_t)
+corecmd_exec_shell(saltmaster_t)
+corecmd_list_bin(saltmaster_t)
+corecmd_read_bin_symlinks(saltmaster_t)
+corenet_tcp_bind_generic_node(saltmaster_t)
+corenet_tcp_bind_generic_port(saltmaster_t)
+dbus_read_lib_files(saltmaster_t)
+dev_read_raw_memory(saltmaster_t)
+dev_read_urand(saltmaster_t)
+dmidecode_domtrans(saltmaster_t)
+files_list_tmp(saltmaster_t)
+files_manage_var_files(saltmaster_t)
+files_rw_pid_dirs(saltmaster_t)
+fs_rw_anon_inodefs_files(saltmaster_t)
+fstools_domtrans(saltmaster_t)
+gnome_list_home_config(saltmaster_t)
+init_exec_script_files(saltmaster_t)
+init_initrc_domain(saltmaster_t)
+iptables_domtrans(saltmaster_t)
+kernel_read_system_state(saltmaster_t)
+libs_domtrans_ldconfig(saltmaster_t)
+logging_write_generic_logs(saltmaster_t)
+lvm_domtrans(saltmaster_t)
+postfix_domtrans_master(saltmaster_t)
+rpm_domtrans(saltmaster_t)
+sysnet_domtrans_ifconfig(saltmaster_t)
+sysnet_read_config(saltmaster_t)
+auth_manage_cache(saltmaster_t)
+files_search_boot(saltmaster_t)
+init_read_state(saltmaster_t)
+
+
+files_read_etc_files(saltmaster_t)
+
+miscfiles_read_localization(saltmaster_t)
