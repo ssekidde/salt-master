@@ -35,7 +35,7 @@ files_pid_filetrans(saltmaster_t, saltmaster_var_run_t, { dir file sock_file })
 domain_use_interactive_fds(saltmaster_t)
 prelink_transition_domain_attribute(saltmaster_t)
 auth_var_filetrans_cache(saltmaster_t)
-brctl_exec(saltmaster_t)
+brctl_domtrans(saltmaster_t)
 
 application_exec_all(saltmaster_t)
 corecmd_exec_bin(saltmaster_t)
