@@ -21,11 +21,15 @@ permissive saltmaster_t;
 
 allow saltmaster_t self:fifo_file rw_fifo_file_perms;
 allow saltmaster_t self:unix_stream_socket create_stream_socket_perms;
+dontaudit saltmaster_t self:capability sys_tty_config;
+allow saltmaster_t self:process { getsched setsched signal_perms };
 
 can_exec(saltmaster_t, saltmaster_exec_t)
 allow saltmaster_t self:netlink_route_socket { bind create getattr nlmsg_read };
 allow saltmaster_t self:tcp_socket { connect connected_stream_socket_perms };
 allow saltmaster_t self:udp_socket create_socket_perms;
+
+term_dontaudit_use_console(saltmaster_t)
 
 manage_dirs_pattern(saltmaster_t, saltmaster_var_run_t, saltmaster_var_run_t)
 manage_files_pattern(saltmaster_t, saltmaster_var_run_t, saltmaster_var_run_t)
